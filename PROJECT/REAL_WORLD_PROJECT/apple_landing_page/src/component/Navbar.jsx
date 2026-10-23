@@ -4,7 +4,7 @@ function Navbar() {
   return (
     <nav className='fixed top-0 left-0 w-full z-50 bg-black/60 backdrop-blur-md border-b border-white/10'>
       <ul className='max-w-5xl mx-auto h-12 px-6 flex items-center justify-between text-xs text-white/80'>
-        <li className='text-base text-white'>&#63743;</li>
+        <li className='text-base text-white'>Apple</li>
         {links.map((l) => (
           <li key={l}>
             <a href='#' className='hover:text-white transition-colors'>{l}</a>

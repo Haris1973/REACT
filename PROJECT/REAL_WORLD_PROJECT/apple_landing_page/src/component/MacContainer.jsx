@@ -1,42 +1,28 @@
-import { Canvas } from '@react-three/fiber'
-import './style.css';
-import { Environment, ScrollControls, Scroll } from '@react-three/drei'
-import MacContainer from './component/MacContainer';
-import Navbar from './component/Navbar';
-import Features from './component/Features';
-import Specs from './component/Specs';
-import Footer from './component/Footer';
+import { useGLTF, useScroll, useTexture } from "@react-three/drei"
+import { useFrame } from "@react-three/fiber";
+import * as THREE from 'three'
 
-function App() {
-  return (
-    <div className='w-full h-screen bg-black'>
-      <Navbar />
+function MacContainer() {
+    let model = useGLTF('./mac.glb');
+    let tex = useTexture('./red.jpg')
+    let meshes = {};
+    model.scene.traverse((e) => {
+        meshes[e.name] = e;
+    });
 
-      <div className='text-white absolute top-32 left-1/2 -translate-x-1/2 text-center font-["Helvetica_Now_Display"] z-10 pointer-events-none'>
-        <h3 className='text-7xl font-[700]'>MACBOOK PRO</h3>
-        <p className='mt-4 text-lg text-white/60 font-light'>Mind-blowing. Head-turning.</p>
-      </div>
-
-      <Canvas camera={{ fov: 12, position: [0, -10, 220] }}>
-        <Environment files={[
-          'https://dl.polyhaven.org/file/ph-assets/HDRIs/exr/4k/studio_small_09_4k.exr'
-        ]} />
-        {/* pages = 1 hero screen + 3 content screens */}
-        <ScrollControls pages={4}>
-          {/* 3D scene — unchanged */}
-          <MacContainer />
-
-          {/* Page content scrolls with the 3D lid animation */}
-          <Scroll html style={{ width: '100%' }}>
-            <div style={{ marginTop: '100vh' }}>
-              <Features />
-              <Specs />
-              <Footer />
-            </div>
-          </Scroll>
-        </ScrollControls>
-      </Canvas>
-    </div>
-  )
+    meshes.screen.rotation.x = THREE.MathUtils.degToRad(180);
+    meshes.matte.material.map = tex;
+    meshes.matte.material.emissiveIntensity = 0;
+    meshes.matte.material.metalness = 0;
+    meshes.matte.material.roughness = 1;
+    let data = useScroll();
+    useFrame((state, delta) => {
+        meshes.screen.rotation.x = THREE.MathUtils.degToRad(180 - data.offset * 90);
+    });
+    return (
+        <group position={[0, -10, 20]}>
+            <primitive object={model.scene} />
+        </group>
+    )
 }
-export default App
+export default MacContainer
