@@ -1,0 +1,21 @@
+/* Import Inter as a fallback if you don't have the Helvetica files */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+
+/* Only use this if you have the actual font file saved in your project */
+@font-face {
+  font-family: 'Helvetica_Now_Display';
+  src: url('./HelveticaNowDisplay.woff2') format('woff2'); 
+}
+
+#root {
+    width: 100%;
+    height: 100%;
+}
+
+html, body {
+    width: 100%;
+    height: 100%;
+    background-color: black;
+    /* This forces the browser to use your custom font, then Inter, then standard sans-serif */
+    font-family: 'Helvetica_Now_Display', 'Inter', -apple-system, sans-serif;
+}
